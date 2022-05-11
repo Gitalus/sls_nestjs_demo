@@ -23,11 +23,13 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  // this route shows how the freezepipe throws an error
   @Post()
   examplePost(@Body(new FreezePipe()) body: any) {
     body.test = 32;
   }
 
+  // this is for showing the use of filters (http-exception.filter.ts)
   @Get('error')
   throwError() {
     throw new InternalServerErrorException();

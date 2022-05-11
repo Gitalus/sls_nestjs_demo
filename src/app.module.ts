@@ -27,6 +27,7 @@ import { RequestService } from './request.service';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
+    // the next code is to show that the pipe can be added here instead of differents routes
     /* {
       provide: APP_PIPE,
       useClass: FreezePipe,
@@ -34,6 +35,7 @@ import { RequestService } from './request.service';
   ],
 })
 export class AppModule implements NestModule {
+  // Applying middleware in this way, there's another way?
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthenticationMiddleware).forRoutes('*');
     // .forRoutes({ path: '/', method: RequestMethod.GET });

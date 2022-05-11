@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
     this.logger.log(AuthGuard.name);
 
     const request = context.switchToHttp().getRequest();
+    // this function should check if a user is valid. Always returning true to show how it works.
     return true;
   }
 }
