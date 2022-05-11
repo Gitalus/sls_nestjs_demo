@@ -1,18 +1,25 @@
 import { NestFactory } from '@nestjs/core';
-import serverlessExpress from '@vendia/serverless-express';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { Handler, Context, Callback } from 'aws-lambda';
+import serverless from 'serverless-http';
 
 import { AppModule } from './app.module';
 
 let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
   // app.useGlobalGuards(new AuthGuard());
   await app.init();
 
-  const expressApp = app.getHttpAdapter().getInstance();
-  return serverlessExpress({ app: expressApp });
+  const fastifyApp = app.getHttpAdapter().getInstance();
+  return serverless(fastifyApp);
 }
 
 export const handler: Handler = async (
