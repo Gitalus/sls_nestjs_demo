@@ -5,7 +5,7 @@ import {
   HttpException,
   Logger,
 } from '@nestjs/common';
-import { FastifyReply /* FastifyRequest */ } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Catch(HttpException) // empty if you want to catch every exception regardles of the type
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -19,13 +19,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     // TODO: This may break after switching to fastify. Need fix
     const response = ctx.getResponse<FastifyReply>();
-    // const request = ctx.getRequest<FastifyRequest>();
+    const request = ctx.getRequest<FastifyRequest>();
     const status = exception.getStatus();
 
-    response.status(status); /* .json({
+    response.status(status).send({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-    }); */
+    });
   }
 }
